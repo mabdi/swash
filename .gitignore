@@ -5,3 +5,4 @@ js/streamConfig.js
 js/configs/streamConfig.json
 
 /.idea/
+.DS_Store
