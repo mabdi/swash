@@ -397,7 +397,10 @@ var contentScript = (function () {
 								};
 							let cbName = message.moduleName + "_" + obj.name + "_" + event.selector + "_" + event.event_name;
 							callbacks[cbName] = callback;
-							if(event.selector == "window"){
+                            if(event.event_name == "."){
+                                callback();
+                            }else
+                            if(event.selector == "window"){
 								// window
 								window.addEventListener(event.event_name, callback);
 							}else 
