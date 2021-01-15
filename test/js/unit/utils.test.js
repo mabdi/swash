@@ -73,6 +73,113 @@ describe('utils', function() {
         });
 	});
 	
+    
+    describe('getModuleContentByPlatform', function(){
+        
+        it('no transformation', async function(){
+            let expected = [
+                            {
+                               name: "mobile profile",
+                               events: [
+                                  {
+                                     selector: "window",
+                                     event_name: "load"
+                                  }
+                               ],
+                               objects: [ ]
+                            }
+                         ];
+            let module = await (await fetch("js/unit/fake-modules/foo.json", {cache: "no-store"})).json();
+            let platform = "mobile";
+            let actual = utils.getModuleContentByPlatform(module, platform);
+            
+            expect(actual).toEqual(expected);
+        });
+        
+        it('transformation', async function(){
+            let expected = [
+                            {
+                               "name": "googleSearchResult",
+                               "url_match": "*://www.google.com/search?*",
+                               "description": "This item collects Google search results, search category, page number and corresponding search query",
+                               "title": "Search Result",
+                               "type": "event",
+                               "is_enabled": true,
+                               "events": [
+                                  {
+                                     "selector": "window",
+                                     "event_name": "."
+                                  }
+                               ],
+                               "objects": [ ]
+                            },
+                            {
+                               "name": "googleClickedLink",
+                               "url_match": "*://www.google.com/search?*",
+                               "description": "This item collects links clicked by user from Google search result",
+                               "title": "Clicked link",
+                               "type": "event",
+                               "is_enabled": true,
+                               "events": [
+                                  {
+                                     "selector": ".g .rc .r",
+                                     "conditions": [
+                                        [
+                                           {
+                                              "type": "parent",
+                                              "contain": false,
+                                              "val": ".related-question-pair"
+                                           }
+                                        ]
+                                     ],
+                                     "event_name": "click"
+                                  },
+                                  {
+                                     "selector": "window",
+                                     "conditions": [
+                                        [
+                                           {
+                                              "type": "parent",
+                                              "contain": false,
+                                              "val": ".related-question-pair"
+                                           }
+                                        ]
+                                     ],
+                                     "event_name": "."
+                                  }
+                               ],
+                               "objects": [ ]
+                            },
+                            {
+                               "name": "googleAdsClickedLink",
+                               "url_match": "*://www.google.com/search?*",
+                               "description": "This item collects advertising links clicked by user from Google search result",
+                               "title": "Ads clicked link",
+                               "type": "event",
+                               "is_enabled": true,
+                               "events": [
+                                  {
+                                     "selector": ".ad_cclk",
+                                     "event_name": "click"
+                                  },
+                                  {
+                                     "selector": "document",
+                                     "event_name": "."
+                                  }
+                               ],
+                               "objects": [ ]
+                            }
+                          ];
+            let module = await (await fetch("js/unit/fake-modules/foo.json", {cache: "no-store"})).json();
+            let platform = "desktop-mac*";
+            let actual = utils.getModuleContentByPlatform(module, platform);
+            
+            expect(actual).toEqual(expected);
+        });
+        
+    });
+    
+    
 	describe('jsonUpdate', function() {
         it('Update existed properties', function() {
 			let src = {

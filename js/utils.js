@@ -105,6 +105,36 @@ var utils = (function() {
 	  return str.join("&"); 
 	}
 	    
+    function getModuleContentByPlatform(module, platform) {
+        var items = module.content[platform];
+        // if the name ends with *, it is a transformation
+        if (! platform.endsWith("*")){
+            return items;
+        }
+        // It is a transformation:
+        var transform = items;
+        let data = module.content[transform["source"]];
+        var ptr = JsonPointer;
+        for(let rule of transform["rules"]) {
+            let jpointers = JSONPath.JSONPath({path: rule["object"], resultType: "pointer" ,json: data});
+            if(jpointers)
+            {
+                for (let jp of jpointers) {
+                    var val = null;
+                    if(rule["by_constant"]){
+                        val = rule["by_constant"];
+                    }else
+                        if(rule["by_jsonpath"]){
+                            val = JSONPath.JSONPath({path: rule["by_jsonpath"], json: data})
+                        }
+                    ptr.set(data, jp, val, true);
+                }
+            }
+        }
+        return data;
+    }
+    
+    
     return {
         jsonUpdate,
         wildcard,
@@ -112,7 +142,8 @@ var utils = (function() {
         uuid,
 		serialize,
         isEmpty,
-        arrayRemove
+        arrayRemove,
+        getModuleContentByPlatform
     };
 }());
 export {utils};

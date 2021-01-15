@@ -403,7 +403,7 @@ var contentScript = (function () {
                             if(event.selector == "window"){
 								// window
 								window.addEventListener(event.event_name, callback);
-							}else 
+                            }else
 							if(event.selector == "document"){
 								// document
 								document.addEventListener(event.event_name, callback);

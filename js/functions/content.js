@@ -15,7 +15,7 @@ var content = (function() {
 			let platform = module.content.content_mapping[info.os];
 			if(!platform || typeof platform === "undefined")
 				platform = 'desktop';
-			module.content.items = module.content[platform];
+			module.content.items = utils.getModuleContentByPlatform(module, platform);
 		}
 	}
 		

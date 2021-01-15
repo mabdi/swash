@@ -29,7 +29,7 @@
 
   "permissions": ["clipboardRead","storage","bookmarks", "tabs", "webRequest", "<all_urls>", "webRequestBlocking", "downloads"],
 
-  "content_security_policy": "script-src 'self' https://www.youtube.com/ https://s.ytimg.com/; object-src 'self';",
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.youtube.com/ https://s.ytimg.com/; object-src 'self';",
 
   "version": "1.2.3"
 }
